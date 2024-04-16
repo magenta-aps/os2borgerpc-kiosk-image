@@ -199,11 +199,16 @@ In this step, you'll need the *connection name* you decided on earlier.
 
 Now type in the following command and afterwards press Enter::
 
-    sudo nmcli con up NAME-OF-CONNECTION-HERE
+    sudo nmcli con up "NAME-OF-CONNECTION-HERE"
 
 .. note::
     If the name of the connection you chose has spaces in the name,
-    you'll need to write "" around the name in the command above.
+    you'll need to write "" around the name in the command above. Otherwise they aren't strictly necessary.
+
+You may additionally want to run the following command, especially if you experience that the computer doesn't connect
+to the Wi-Fi after a restart::
+
+    sudo nmcli con mod ”NAME-OF-CONNECTION-HERE” connection.autoconnect yes
 
 Now you should have internet access through the wireless with hidden SSID!
 
