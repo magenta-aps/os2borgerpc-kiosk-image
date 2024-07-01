@@ -23,14 +23,24 @@ the defaults will be fine - in that case, hit TAB until you reach "Done"
 and hit ENTER. Otherwise, specify disk and partitions according to your
 needs.
 
-As this will destroy all data in the disk in question, you will now be
-asked to "Confirm destructive action". To proceed, select "Continue".
+OPTIONAL: You can activate disk encryption by checking the option
+"Encrypt the LVM group with LUKS" (hit TAB or use the arrow keys to
+highlight the relevant line then press ENTER) and then entering a
+passphrase. If you activate disk encryption, it will be necessary to
+enter the chosen passphrase during every startup of the computer.
+Entering the passphrase will require a physical keyboard.
+
+As the installation will destroy all data on the disk in question, you will
+now be asked to "Confirm destructive action". To proceed, select "Continue".
 
 .. warning::  This step *will* destroy all data on the disk you install on.
 
 The system will now install - this will take some time.
 
 Remove the install media and reboot.
+
+NOTE: If you chose to activate disk encryption, the computer
+will ask for the passphrase shortly after the reboot.
 
 The login screen may contain output related to the upstart process:
 
