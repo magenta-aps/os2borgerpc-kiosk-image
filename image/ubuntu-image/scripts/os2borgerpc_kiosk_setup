@@ -41,19 +41,65 @@ if ! id $USER &>/dev/null; then
 fi
 
 # Setup autologin of default user
-mkdir -p /etc/systemd/system/getty@tty1.service.d
+mkdir --parents /etc/systemd/system/getty@tty1.service.d /usr/share/os2borgerpc/bin
+
+AUTOLOGIN_SCRIPT="/usr/share/os2borgerpc/bin/autologin.sh"
+AUTOLOGIN_COUNTER="/etc/os2borgerpc/login_counter.txt"
+COUNTER_RESET_SERVICE="/etc/systemd/system/reset_login_counter.service"
+MAXIMUM_CONSECUTIVE_AUTOLOGINS=3
 
 # Note: The empty ExecStart is not insignificant!
 # By default the value is appended, so the empty line changes it to an override
+# We make agetty use our own login-program instead of /bin/login
+# so we can customize the behavior
 cat << EOF > /etc/systemd/system/getty@tty1.service.d/override.conf
 [Service]
 ExecStart=
-ExecStart=-/sbin/agetty --noissue --autologin $USER %I $TERM
+ExecStart=-/sbin/agetty --noissue --login-program $AUTOLOGIN_SCRIPT --autologin $USER %I $TERM
 Type=idle
 EOF
 
+# Create the login script
+cat << EOF > $AUTOLOGIN_SCRIPT
+#! /usr/bin/env bash
+COUNTER=\$(cat $AUTOLOGIN_COUNTER)
+COUNTER=\$((COUNTER+1))
+echo \$COUNTER > $AUTOLOGIN_COUNTER
+if [ \$COUNTER -le $MAXIMUM_CONSECUTIVE_AUTOLOGINS ]; then
+  if [ \$COUNTER -gt 1 ]; then
+    # Sleep before autologin attempts other than the first
+    sleep 10
+  fi
+  # Autologin as $CUSER
+  /bin/login -f $CUSER
+else
+  # Regular login prompt
+  /bin/login
+fi
+EOF
+
+chmod 700 $AUTOLOGIN_SCRIPT
+
+# Create login counter
+echo "0" > $AUTOLOGIN_COUNTER
+
+# Create service to reset counter when
+# the computer is booted
+cat << EOF > $COUNTER_RESET_SERVICE
+[Unit]
+Description=Reset the autologin counter when the computer starts
+
+[Service]
+Type=oneshot
+ExecStart=sh -c 'echo "0" > $AUTOLOGIN_COUNTER'
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl enable --now "$(basename $COUNTER_RESET_SERVICE)"
+
 # Create script to rotate screen
-mkdir --parents /usr/share/os2borgerpc/bin
 cat << EOF > /usr/share/os2borgerpc/bin/rotate_screen.sh
 #!/usr/bin/env sh
 
