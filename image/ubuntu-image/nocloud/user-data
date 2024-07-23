@@ -30,7 +30,40 @@ autoinstall:
 
   late-commands:
     - cp -r /cdrom/scripts/* /target/usr/local/bin
+    # Makes the auto login folder and copy the override.conf file to it
+    - 'mkdir -p /target/etc/systemd/system/getty@tty1.service.d/'
+    - 'cp /etc/systemd/system/getty@tty1.service.d/override.conf /target/etc/systemd/system/getty@tty1.service.d/override.conf'
+    # Makes the first_boot_setup.sh run on login
+    - 'cp /cdrom/scripts/first_boot_setup.sh /target/etc/profile.d/first_boot_setup.sh'
+    - 'chmod +x /target/etc/profile.d/first_boot_setup.sh'
+    # This allows the wifi_setup and os2borgerpc_kiosk_setup to run without sudo password, made in writefiles
+    - 'cp /etc/sudoers.d/first_boot_setup /target/etc/sudoers.d/first_boot_setup'
 
   version: 1
   interactive-sections:
     - storage
+
+# Creates a autologin file, but chronologically write_files is executed before latecommands,
+# so this is a workaround for the late-commands not being able to create files in the target system,
+# and the file here is being transferred to the target system later, in the late-commands.
+# The bin/sleep seems to ensure, that the service is run after cloud init final, else the first_boot_setup often gets
+# interrupted by cloud init final messages.
+write_files:
+  - path: /etc/systemd/system/getty@tty1.service.d/override.conf
+    permissions: '0644'
+    content: |
+      [Service]
+      Type=idle
+      ExecStart=
+      ExecStartPre=/bin/sleep 3
+      ExecStart=-/sbin/agetty --noissue --autologin superuser %I $TERM
+  - path: /etc/sudoers.d/first_boot_setup
+    permissions: '0440'
+    content: |
+      superuser ALL=(root) NOPASSWD: /usr/local/bin/wifi_setup
+      superuser ALL=(root) NOPASSWD: /usr/local/bin/os2borgerpc_kiosk_setup
+
+runcmd:
+# runcmd only runs after the installation is complete, and only once
+# Reload the systemd, so that the new autologin file is loaded
+  - [ /usr/bin/systemctl, daemon-reload ]

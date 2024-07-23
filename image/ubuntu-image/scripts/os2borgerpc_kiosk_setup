@@ -137,3 +137,7 @@ EOF
 
 #  Connect to the admin system
 register_new_os2borgerpc_client.sh
+
+# Remove fist boot setup files
+rm -f /etc/profile.d/first_boot_setup.sh
+rm -f /usr/local/bin/first_boot_setup.sh
