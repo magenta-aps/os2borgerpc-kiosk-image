@@ -22,10 +22,6 @@ official home page:
 
     https://os2.eu/produkt/os2borgerpc
 
-and the official Github project:
-
-    https://github.com/OS2borgerPC/
-
 The OS2borgerPC Kiosk Image is free software, and you are welcome to
 use, study, modify and distribute it under the terms of version 3 of the
 GNU General Public License.
