@@ -75,7 +75,7 @@ if [ "$PKGS_TO_INSTALL" != "" ]; then
 fi
 
 # Install os2borgerpc client
-pip3 install os2borgerpc-client
+pip3 install os2borgerpc-client --break-system-packages
 
 # Install Danish language package
 apt-get -y install language-pack-da language-pack-da-base

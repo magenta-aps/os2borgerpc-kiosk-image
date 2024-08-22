@@ -70,8 +70,8 @@ if [ \$COUNTER -le $MAXIMUM_CONSECUTIVE_AUTOLOGINS ]; then
     # Sleep before autologin attempts other than the first
     sleep 10
   fi
-  # Autologin as $CUSER
-  /bin/login -f $CUSER
+  # Autologin as $USER
+  /bin/login -f $USER
 else
   # Regular login prompt
   /bin/login
@@ -138,6 +138,5 @@ EOF
 #  Connect to the admin system
 register_new_os2borgerpc_client.sh
 
-# Remove fist boot setup files
-rm -f /etc/profile.d/first_boot_setup.sh
-rm -f /usr/local/bin/first_boot_setup.sh
+# Remove first boot setup files
+rm -f /etc/profile.d/installation_wizard.sh /usr/local/bin/installation_wizard.sh
