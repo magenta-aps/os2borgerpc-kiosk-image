@@ -16,8 +16,27 @@ export DEBIAN_FRONTEND=noninteractive
 # Set proper, restricted permissions on superuser homedir
 chmod -R 700 /home/superuser
 
+# Check the internet connection
+if ! curl --head --silent --fail https://www.google.com > /dev/null 2>&1; then
+  printf "\n%s\n%s\n" "Your kiosk machine is not connected to the internet." \
+  "Check your connection and then try running sudo os2borgerpc_kiosk_setup again."
+  exit 1
+fi
+
+# Check the connection to dk.archive.ubuntu.com
+if ! curl --head --silent --fail dk.archive.ubuntu.com > /dev/null 2>&1; then
+  printf "\n%s\n%s\n%s\n" "Cannot connect to the Ubuntu archives. Perhaps they are temporarily down." \
+  "Try waiting a couple hours and then running sudo os2borgerpc_kiosk_setup again." \
+  "If the problem persists for more than a day, check your firewall configuration."
+  exit 1
+fi
+
 # Install all necessary packages and dependencies
-$DIR/install_dependencies.sh
+if ! $DIR/install_dependencies.sh; then
+  printf "\n%s\n%s\n" "Installing required files failed." \
+  "Try restarting the computer and then running sudo os2borgerpc_kiosk_setup again."
+  exit 1
+fi
 
 # Prepare to run jobs
 mkdir -p /var/lib/os2borgerpc/jobs
@@ -139,4 +158,4 @@ EOF
 register_new_os2borgerpc_client.sh
 
 # Remove first boot setup files
-rm -f /etc/profile.d/installation_wizard.sh /usr/local/bin/installation_wizard.sh
+rm -f /etc/profile.d/installation_wizard.sh /etc/sudoers.d/first_boot_setup
