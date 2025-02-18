@@ -31,19 +31,13 @@ autoinstall:
   late-commands:
     - cp -r /cdrom/scripts/* /target/usr/local/bin
     # Makes the auto login folder and copy the override.conf file to it
-    - 'mkdir -p /target/etc/systemd/system/getty@tty1.service.d/'
-    - 'cp /cdrom/files/override.conf /target/etc/systemd/system/getty@tty1.service.d/override.conf'
+    - mkdir -p /target/etc/systemd/system/getty@tty1.service.d/
+    - cp /cdrom/files/override.conf /target/etc/systemd/system/getty@tty1.service.d/override.conf
     # Makes the installation_wizard.sh run on login
-    - 'cp /cdrom/scripts/installation_wizard.sh /target/etc/profile.d/installation_wizard.sh'
-    - 'chmod +x /target/etc/profile.d/installation_wizard.sh'
+    - cp /cdrom/files/installation_wizard.sh /target/etc/profile.d/installation_wizard.sh
     # This allows the wifi_setup and os2borgerpc_kiosk_setup to run without sudo password, made in writefiles
-    - 'cp /cdrom/files/first_boot_setup /target/etc/sudoers.d/first_boot_setup'
+    - cp /cdrom/files/first_boot_setup /target/etc/sudoers.d/first_boot_setup
 
   version: 1
   interactive-sections:
     - storage
-
-runcmd:
-# runcmd only runs after the installation is complete, and only once
-# Reload the systemd, so that the new autologin file is loaded
-  - [ /usr/bin/systemctl, daemon-reload ]
