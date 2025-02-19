@@ -65,7 +65,7 @@ while true; do
   printf "\nStarting final setup.\n"
 
   if sudo os2borgerpc_kiosk_setup; then
-    printf "\nSetup complete.\nRemember to change the superuser password via the script on the admin-site.\n"
+    printf "\nSetup complete.\n\nRemember to change the superuser password via the script on the admin-site.\n\n"
     break
   else
     printf "\n%s\n%s\n" "Final setup failed." \

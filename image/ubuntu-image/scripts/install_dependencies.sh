@@ -59,7 +59,7 @@ if [ "$PKGS_TO_INSTALL" != "" ]; then
 fi
 
 # Install os2borgerpc client, exit if it fails
-pip3 install os2borgerpc-client || printf "\nClient installation failed\n" && exit 1
+pipx install os2borgerpc-client || sh -c 'printf "\nClient installation failed\n" && exit 1'
 
 # Install Danish language package
 apt-get -y install language-pack-da language-pack-da-base
