@@ -37,6 +37,8 @@ autoinstall:
     - cp /cdrom/files/installation_wizard.sh /target/etc/profile.d/installation_wizard.sh
     # This allows the wifi_setup and os2borgerpc_kiosk_setup to run without sudo password, made in writefiles
     - cp /cdrom/files/first_boot_setup /target/etc/sudoers.d/first_boot_setup
+    # Configure pipx bin directory
+    - echo 'PIPX_BIN_DIR="/usr/local/bin"' >> /target/etc/environment
 
   version: 1
   interactive-sections:
