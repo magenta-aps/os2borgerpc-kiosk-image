@@ -36,6 +36,9 @@ while true; do
     break
   fi
 
+  clear
+  printf "OS2borgerPC Kiosk initial setup starting."
+
   # Only offer to run wifi_setup if it has not already been done
   if [ ! -f "/etc/wifi-setup-done" ]; then
     # Does the user want to run the wifi_setup?
