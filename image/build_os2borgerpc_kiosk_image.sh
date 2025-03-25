@@ -61,6 +61,8 @@ cd ../../..
 
 sudo cp ../VERSION iso/scripts/
 
+sed --in-place "s/VERSION/$(cat ../VERSION)/" iso/boot/grub/grub.cfg
+
 mbr="boot_hybrid.img"
 
 efi="ubuntu22-server-amd64.efi"
