@@ -1,8 +1,6 @@
 #cloud-config
 autoinstall:
   apt:
-    geoip: true
-    preserve_sources_list: false
     primary:
     - arches: [amd64, i386]
       uri: http://dk.archive.ubuntu.com/ubuntu
@@ -16,10 +14,6 @@ autoinstall:
   }
   keyboard: {layout: dk, toggle: null, variant: ''}
   locale: en_US
-  # network:
-  #  ethernets:
-  #    ens3: {dhcp4: true}
-  #  version: 2
   ssh:
     allow-pw: true
     authorized-keys: []
