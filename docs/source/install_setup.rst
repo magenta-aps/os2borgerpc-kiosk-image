@@ -9,7 +9,7 @@ or build one yourself according to the instructions in the ``image``
 directory.
 
 Copy the image to a USB or DVD and boot the target computer with it.
-Two cross platform programs for this purpose are "Balena Etcher" and "Rufus".
+One cross platform program for this purpose is "Rufus".
 
 The image will work with UEFI boot, but legacy boot is also supported.
 
@@ -42,42 +42,74 @@ Remove the install media and reboot.
 NOTE: If you chose to activate disk encryption, the computer
 will ask for the passphrase shortly after the reboot.
 
-The login screen may contain output related to the upstart process:
+On OS2borgerPC Kiosk 3.0.0 or newer images, the computer will now ask if you
+wish to start the built-in installation wizard.
+
+.. note:: OS2borgerPC Kiosk images older than 3.0.0 do not have an installation wizard.
+    Instead, you'll need to login as the user ``superuser`` with password ``superuser``
+    and run the commands corresponding to each step in the wizard.
+
+The screen may contain output related to the upstart process, but this can be ignored.
 
 .. image:: install_2.png
 
-This is not a problem and you'll be able to login as the user ``superuser`` with password ``superuser``.
+Simply press ENTER if you wish to start the installation wizard. If you do not
+wish to use the wizard, type n before pressing ENTER. If you exit the wizard,
+you will already be logged in as superuser, but it will be necessary to run the
+commands corresponding to each step of the wizard in order to complete the
+installation. You can restart the wizard by running the command::
 
-.. danger::
-    Please change this password *immediately* after deploying each
-    server!! There's a script in OS2borgerPC Admin to do this.
+    exit
 
 Getting internet access
 -----------------------
 
-If you installed with an Ethernet cable and a DHCP-enabled network, the
-computer is already online. If you need to set up wireless network or
-configure a static IP, you must first install basic wireless
-capabilities - these are not installed by default. You don't need a
-network connection, just enter the command::
+First, the wizard will ask if you wish to install Wi-Fi drivers. These are
+necessary if you wish to set up a wireless network or configure a static IP.
+They are not installed by default. You don't need a network connection to install
+the Wi-Fi drivers.
+
+If the computer is connected with an Ethernet cable and a DHCP-enabled network, and
+you do not wish to configure a static IP, the Wi-Fi drivers are not necessary.
+However, if the computer will need to be connected to a wireless network in the
+future, we recommend installing the Wi-Fi drivers anyway.
+
+.. note::
+    If you can't get internet access while using an Ethernet cable and a DHCP-enabled
+    network, it might help to switch to the HWE kernel. See the related guide below.
+
+
+Simply press ENTER to begin installing the Wi-Fi drivers. Type n before pressing
+ENTER if you do not wish to install the Wi-Fi drivers.
+
+You can install the Wi-Fi drivers without the wizard by running the command::
 
     sudo wifi_setup
 
-.. note:: If you don't need to use a wireless connection or do any
-    other special network setup like setting up a static IP address,
-    there is no need to execute this command.
-
 .. note:: If what you want to connect to is a hidden SSID, see the guide below.
 
-With this in place, enter the following command::
+If you choose to install Wi-Fi drivers, the wizard will ask if you want to manually
+configure Wi-Fi after the drivers have been installed. If you choose not to install
+Wi-Fi drivers, this step will be skipped.
+
+Simply press ENTER to open ``nmtui``, which is used to connect to a wireless network
+or configure a static IP. Type n before pressing ENTER to skip manual Wi-Fi
+configuration.
+
+You can open ``nmtui`` without the wizard by running the command::
 
     nmtui
 
-You navigate within ``nmtui`` via the arrow keys, Enter and Escape.
+You navigate within ``nmtui`` via the arrow keys, ENTER and ESC.
 
 To connect to a new network choose "Activate a connection" in the menu.
 If everything works as it should and the computer has a wireless card,
 you will see a list of wireless networks (if any exist, of course).
+
+.. note::
+    If the computer can't see any wireless networks even though one or
+    more should exist, it might help to switch to the HWE kernel. See
+    the related guide below.
 
 Once you've found and selected the desired Wi-Fi from the list, you
 will be prompted for its password.
@@ -98,28 +130,40 @@ Connection". You can now setup static IP, etc.
     though in some cases it will also work without it - it depends on
     your specific wireless card.
 
-Connect to OS2borgerPC-admin (our admin system)
+Once you're connected to the network and exit ``nmtui``, or if you skip manual
+Wi-Fi configuration, the wizard will start the final setup. If you exit ``nmtui``
+without being connected to the network, the wizard will ask if you wish to retry
+manual Wi-Fi configuration.
+
+Final setup and connecting to OS2borgerPC-admin (our admin system)
 -----------------------------------------------
 
-Once you're connected to the network, enter the command::
+You can start the final setup without the wizard by running the command::
 
     sudo os2borgerpc_kiosk_setup
 
-This will install all dependencies for the OS2borgerPC client.
-
+The final setup will first install all dependencies for the OS2borgerPC client.
 
 .. note::
 
     This may take some time.
 
-Finally you'll be prompted for information to register the machine
+Finally, you'll be prompted for information to register the machine
 with our admin system:
 
 - ``name``: Give the computer any valid name you like.
 - ``site``: If hosted by us: Use the site name we should've e-mailed you. If self-hosting or developing: Create a site, and
   specify its name here.
-- ``server``: If hosted by us: Just press enter. If self-hosting specify the domain of your server. For development its
+
+If you are using an image older than 3.0.0, you will also be prompted for the
+``server``: If hosted by us: Just press ENTER. If self-hosting specify the domain of your server. For development its
   likely some port on localhost.
+
+The final setup is now complete.
+
+.. danger::
+    Please change the ``superuser`` password *immediately* after deploying each
+    Kiosk!! There's a script in OS2borgerPC Admin to do this.
 
 Setting up a browser
 --------------------
@@ -129,28 +173,33 @@ may set it up to run a browser in kiosk mode.
 
 There are two scripts needed to do this.
 
-The first is called "OS2borgerPC Kiosk  - Installer Chromium" and will
+The first is called "OS2borgerPC Kiosk  - Chromium Installér" and will
 install the browser and setup minimum GUI capabilities.
 
 When this script has run successfully, you can configure Chromium to
 start automatically on boot and configure the start URL and time delay
-as needed. You do this by running the script called "OS2borgerPC Kiosk - Autostart
-Chromium".
+as needed. You do this by running the script called "OS2borgerPC Kiosk - Chromium
+Autostart".
 
-In this script, you must specify the following four parameters:
+In this script, you must specify the following six parameters:
 
-* ``time`` - a delay time before Chromium is started.
+* ``delay`` - a delay time before Chromium is started.
 * ``url`` - the start URL for your kiosk, e.g. an OS2display site.
 * ``width`` - the width (X) component of the desired screen resolution, e.g.
-  "1980".
+  "1980". The default value "auto" will make the computer attempt to
+  determine the correct value automatically.
 * ``height`` - the height component of the desired screen resolution, e.g.
-  "1080".
-* ``orientation`` - the orientation or rotation of the screen. Values
-  must be one of ``normal``, ``right`` or ``left``. If this parameter is
-  misspelled, the system will default to "normal".
+  "1080". The default value "auto" will make the computer attempt to
+  determine the correct value automatically.
+* ``orientation`` - the orientation or rotation of the screen. Possible
+  values are ``normal``, ``right``, ``left`` or ``inverted``.
+* ``Keyboard shortcut lockdown`` - whether to block certain keyboard shortcuts.
+  Possible values are ``0: No keyboard shortcut lockdown``,
+  ``1: Lock keyboard shortcuts except print, refresh and zoom`` and
+  ``2: Lock all keyboard shortcuts``
 
-The width and height parameters must correspond to the preferred
-(maximum) screen resolution of your monitor.
+If specified manually, the width and height parameters must correspond to the
+preferred (maximum) screen resolution of your monitor.
 
 Advanced topics (not relevant for most setups)
 ----------------------------------------------
@@ -161,6 +210,8 @@ Connect to a hidden SSID
 When it's a hidden SSID ``nmtui`` currently cannot see it, and thus can't activate  a connection to it.
 
 Here follows a workaround:
+
+You will need to exit the installation wizard to perform all of the required steps.
 
 Type ``nmtui`` in the terminal and press Enter to start it.
 
@@ -222,6 +273,30 @@ to the Wi-Fi after a restart::
 
 Now you should have internet access through the wireless with hidden SSID!
 
+Switching to the HWE kernel
+===========================
+
+.. note:: This section only applies to OS2borgerPC Kiosk image 3.0.0 or newer.
+
+In some rare cases, the computer might not be able to connect to the internet via ethernet
+or see any existing wireless networks because the standard kernel does not have the correct
+drivers for the network card. This can potentially be fixed by switching to the HWE kernel.
+
+In order to install the HWE kernel, it is necessary to exit the installation wizard. This can
+be done before starting the wizard, as previously described, or by pressing Ctrl + C when the wizard
+is asking a question. Once you have exited the wizard, run the following command. You don't need
+a network connection to run this command and install the HWE kernel::
+
+    sudo hwe_install
+
+Installing the HWE kernel might take some time. After the HWE kernel has been installed, you will
+need to reboot the computer to allow it to switch to the HWE kernel. This can be done manually or
+by running the following command::
+
+    sudo reboot
+
+The computer will now be using the HWE kernel.
+
 Additional remote access
 ========================
 
@@ -232,7 +307,7 @@ be able to SSH to the machine and to see its display by connecting with
 a VNC client.
 
 .. danger::
-    You *must* change the standard password before or *immediately*
+    You *must* change the standard ``superuser`` password before or *immediately*
     after running this script.
 
 .. note::
