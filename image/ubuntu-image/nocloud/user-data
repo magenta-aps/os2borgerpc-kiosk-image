@@ -1,8 +1,6 @@
 #cloud-config
 autoinstall:
   apt:
-    geoip: true
-    preserve_sources_list: false
     primary:
     - arches: [amd64, i386]
       uri: http://dk.archive.ubuntu.com/ubuntu
@@ -16,10 +14,6 @@ autoinstall:
   }
   keyboard: {layout: dk, toggle: null, variant: ''}
   locale: en_US
-  # network:
-  #  ethernets:
-  #    ens3: {dhcp4: true}
-  #  version: 2
   ssh:
     allow-pw: true
     authorized-keys: []
@@ -30,6 +24,18 @@ autoinstall:
 
   late-commands:
     - cp -r /cdrom/scripts/* /target/usr/local/bin
+    # Makes the auto login folder and copy the override.conf file to it
+    - mkdir -p /target/etc/systemd/system/getty@tty1.service.d/
+    - cp /cdrom/files/override.conf /target/etc/systemd/system/getty@tty1.service.d/override.conf
+    # Makes the installation_wizard.sh run on login
+    - cp /cdrom/files/installation_wizard.sh /target/etc/profile.d/installation_wizard.sh
+    # This allows the wifi_setup and os2borgerpc_kiosk_setup to run without sudo password, made in writefiles
+    - cp /cdrom/files/first_boot_setup /target/etc/sudoers.d/first_boot_setup
+    # Add admin-url file
+    - mkdir -p /target/etc/os2borgerpc
+    - cp /cdrom/files/admin-url /target/etc/os2borgerpc/admin-url
+    # Configure pipx bin directory
+    - echo 'PIPX_BIN_DIR="/usr/local/bin"' >> /target/etc/environment
 
   version: 1
   interactive-sections:

@@ -1,7 +1,5 @@
 dnsmasq-base
 dns-root-data
-language-pack-da
-language-pack-da-base
 libbluetooth3
 libidn12
 libjansson4

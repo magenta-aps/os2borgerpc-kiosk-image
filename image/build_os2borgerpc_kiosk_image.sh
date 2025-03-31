@@ -34,8 +34,8 @@ cd iso/scripts/wifi || exit 1
 # These are downloaded from the host system currently, so maybe it needs to be built from a machine that's the same version of
 # Ubuntu as the target?
 # Note: If testing locally consider commenting out these two to make the build process a bit faster
-sudo apt-get install --download-only --assume-yes network-manager language-pack-da
-sudo apt download $(tr '\n' ' ' < deps.txt)
+sudo apt-get install --download-only --assume-yes network-manager
+sudo apt download $(tr '\n' ' ' < wifi_deps.txt)
 
 popd
 
@@ -60,6 +60,8 @@ rm hwe_install_log.txt
 cd ../../..
 
 sudo cp ../VERSION iso/scripts/
+
+sed --in-place "s/VERSION/$(cat ../VERSION)/" iso/boot/grub/grub.cfg
 
 mbr="boot_hybrid.img"
 
