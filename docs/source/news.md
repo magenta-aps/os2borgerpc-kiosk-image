@@ -1,3 +1,2 @@
-# Release History
-
-```{include} ../../NEWS.md```
+```{include} ../../NEWS.md
+```

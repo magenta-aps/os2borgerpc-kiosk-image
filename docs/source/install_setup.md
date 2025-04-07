@@ -47,14 +47,7 @@ Remove the install media and reboot.
 NOTE: If you chose to activate disk encryption, the computer
 will ask for the passphrase shortly after the reboot.
 
-On OS2borgerPC Kiosk 3.0.0 or newer images, the computer will now ask if you
-wish to start the built-in installation wizard.
-
-:::{note}
-  OS2borgerPC Kiosk images older than 3.0.0 do not have an installation wizard.
-  Instead, you'll need to login as the user `superuser` with password `superuser`
-  and run the commands corresponding to each step in the wizard.
-:::
+The computer will now ask if you wish to start the built-in installation wizard.
 
 The screen may contain output related to the upstart process, but this can be ignored.
 
@@ -71,7 +64,7 @@ exit
 
 # Getting internet access
 
-First, the wizard will ask if you wish to install Wi-Fi drivers. These are
+First, the wizard will ask if you wish to install Wi-Fi drivers. This is
 necessary if you wish to set up a wireless network or configure a static IP.
 They are not installed by default. You don't need a network connection to install
 the Wi-Fi drivers.
@@ -167,10 +160,6 @@ with our admin system:
 - `site`: If hosted by us: Use the site name we should've e-mailed you. If self-hosting or developing: Create a site, and
   specify its name here.
 
-If you are using an image older than 3.0.0, you will also be prompted for the
-`server`: If hosted by us: Just press ENTER. If self-hosting specify the domain of your server. For development its
-  likely some port on localhost.
-
 The final setup is now complete.
 
 :::{danger}
@@ -189,29 +178,12 @@ The first is called "OS2borgerPC Kiosk  - Chromium Installér" and will
 install the browser and setup minimum GUI capabilities.
 
 When this script has run successfully, you can configure Chromium to
-start automatically on boot and configure the start URL and time delay
-as needed. You do this by running the script called "OS2borgerPC Kiosk - Chromium
+start automatically on boot and configure the start page as needed.
+You do this by running the script called "OS2borgerPC Kiosk - Chromium
 Autostart".
 
-In this script, you must specify the following six parameters:
-
-* `delay` - a delay time before Chromium is started.
-* `url` - the start URL for your kiosk, e.g. an OS2display site.
-* `width` - the width (X) component of the desired screen resolution, e.g.
-  "1980". The default value "auto" will make the computer attempt to
-  determine the correct value automatically.
-* `height` - the height component of the desired screen resolution, e.g.
-  "1080". The default value "auto" will make the computer attempt to
-  determine the correct value automatically.
-* `orientation` - the orientation or rotation of the screen. Possible
-  values are `normal`, `right`, `left` or `inverted`.
-* `Keyboard shortcut lockdown` - whether to block certain keyboard shortcuts.
-  Possible values are `0: No keyboard shortcut lockdown`,
-  `1: Lock keyboard shortcuts except print, refresh and zoom` and
-  `2: Lock all keyboard shortcuts`
-
-If specified manually, the width and height parameters must correspond to the
-preferred (maximum) screen resolution of your monitor.
+For more information about these scripts, read their descriptions on the
+admin system.
 
 # Advanced topics (not relevant for most people)
 
@@ -287,15 +259,11 @@ sudo nmcli con mod ”NAME-OF-CONNECTION-HERE” connection.autoconnect yes
 
 Now you should have internet access through the wireless with hidden SSID!
 
-## Switching to the HWE kernel
-
-:::{note}
-This section only applies to OS2borgerPC Kiosk image 3.0.0 or newer.
-:::
+## Switching to the HWE kernel (Hardware Enablement Kernel)
 
 In some rare cases, the computer might not be able to connect to the internet via ethernet
 or see any existing wireless networks because the standard kernel does not have the correct
-drivers for the network card. This can potentially be fixed by switching to the HWE kernel.
+drivers for the network card(s). This can potentially be fixed by switching to the HWE kernel.
 
 In order to install the HWE kernel, it is necessary to exit the installation wizard. This can
 be done before starting the wizard, as previously described, or by pressing Ctrl + C when the wizard
