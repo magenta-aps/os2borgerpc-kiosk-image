@@ -3,12 +3,13 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-=========================
+#########################
 OS2BorgerPC - Kiosk Image
-=========================
+#########################
 
+************
 Introduction
-============
+************
 
 OS2BorgerPC - Kiosk Image is the specialized Ubuntu distribution server image for audience PCs in
 public libraries in Denmark (Part of the `OS2BorgerPC system <https://os2.eu/produkt/os2borgerpc>`_).
@@ -16,14 +17,15 @@ public libraries in Denmark (Part of the `OS2BorgerPC system <https://os2.eu/pro
 .. toctree::
    :maxdepth: 2
 
-   install_setup
-   news
-   technical_documentation
-   archive
    readme
+   install_setup
+   install_setup_legacy
+   news
+   archive
 
+******************
 Indices and tables
-==================
+******************
 
 * :ref:`genindex`
 * :ref:`modindex`
