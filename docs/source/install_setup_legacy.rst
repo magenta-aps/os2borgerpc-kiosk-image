@@ -49,7 +49,7 @@ will ask for the passphrase shortly after the reboot.
 
 The login screen may contain output related to the upstart process:
 
-.. image:: install_2.png
+.. image:: install_2_legacy.png
 
 This is not a problem and you'll be able to login as the user ``superuser`` with password ``superuser``.
 

@@ -2,4 +2,5 @@
 
 ## Legacy technical documentation
 
-```{include} ../../image/README.md```
+```{include} ../../image/README.md
+```
