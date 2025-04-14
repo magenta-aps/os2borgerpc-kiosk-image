@@ -24,7 +24,7 @@ copyright = "2024, Magenta ApS"
 author = "Magenta ApS"
 
 # The full version, including alpha/beta/rc tags
-release = "2.1.0"
+release = "2.2.0"
 
 
 # -- General configuration ---------------------------------------------------
@@ -33,6 +33,8 @@ release = "2.1.0"
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = ["myst_parser"]
+# Support MyST's default ::: blocks for e.g. admonitions, not just backticks
+myst_enable_extensions = ["colon_fence"]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]

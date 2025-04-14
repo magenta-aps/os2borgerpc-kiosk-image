@@ -1,5 +1,10 @@
-How to install and run OS2borgerPC Kiosk
-****************************************
+Legacy installation guide - for 22.04 and older
+***********************************************
+
+.. note::
+    This is the Installation guide for OS2borgerPC Kiosk 22.04 and older.
+    We instead recommend installing our newer 24.04 images.
+    The installation guide for the newer images can be found here: :doc:`install_setup`
 
 Install OS2borgerPC Kiosk image
 -------------------------------
@@ -9,7 +14,7 @@ or build one yourself according to the instructions in the ``image``
 directory.
 
 Copy the image to a USB or DVD and boot the target computer with it.
-Two cross platform programs for this purpose are "Balena Etcher" and "Rufus".
+One cross platform program for this purpose is "Rufus".
 
 The image will work with UEFI boot, but legacy boot is also supported.
 
@@ -44,7 +49,7 @@ will ask for the passphrase shortly after the reboot.
 
 The login screen may contain output related to the upstart process:
 
-.. image:: install_2.png
+.. image:: install_2_legacy.png
 
 This is not a problem and you'll be able to login as the user ``superuser`` with password ``superuser``.
 
