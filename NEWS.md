@@ -1,6 +1,6 @@
 # Release History
 
-## Version 3.0.0, April 22, 2025
+## Version 3.0.0, May 5, 2025
 
 Changes in this version:
 

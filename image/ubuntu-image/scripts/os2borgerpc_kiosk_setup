@@ -158,4 +158,4 @@ EOF
 register_new_os2borgerpc_client.sh
 
 # Remove first boot setup files
-rm -f /etc/profile.d/installation_wizard.sh /etc/sudoers.d/first_boot_setup /home/superuser/first_boot_done
+rm -f /etc/profile.d/installation_wizard.sh /etc/sudoers.d/first_boot_setup
