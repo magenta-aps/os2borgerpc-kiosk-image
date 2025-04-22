@@ -1,2 +1,5 @@
 *.iso
 iso/
+.idea/
+boot_hybrid.img
+*.efi
