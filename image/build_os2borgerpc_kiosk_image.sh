@@ -34,12 +34,34 @@ cd iso/scripts/wifi || exit 1
 # These are downloaded from the host system currently, so maybe it needs to be built from a machine that's the same version of
 # Ubuntu as the target?
 # Note: If testing locally consider commenting out these two to make the build process a bit faster
-sudo apt-get install --download-only --assume-yes network-manager language-pack-da
-sudo apt download $(tr '\n' ' ' < deps.txt)
+sudo apt-get install --download-only --assume-yes network-manager
+sudo apt download $(tr '\n' ' ' < wifi_deps.txt)
 
 popd
 
+mkdir --parents iso/scripts/hwe # rsync does not make this folder because it does not contain any files in the repo
+cd iso/scripts/hwe || exit 1
+# We do this separately because we need to determine the names of the dependencies for the hwe kernel
+# These dependencies include the version number in their name so we determine the names dynamically
+# based on what is listed in the output from apt-get install --download-only
+sudo apt-get install --download-only --assume-yes linux-generic-hwe-$(lsb_release --release --short) > hwe_install_log.txt
+# Download the dependencies for the hwe kernel
+sudo apt download linux-generic-hwe-$(lsb_release --release --short) \
+  linux-image-generic-hwe-$(lsb_release --release --short) \
+  linux-headers-generic-hwe-$(lsb_release --release --short) \
+  $(grep -E -o -m 1 "linux-headers-[0-9\.]*-[0-9]*-generic" hwe_install_log.txt) \
+  $(grep -E -o -m 1 "linux-hwe-[0-9\.]*-headers-[0-9\.]*-[0-9]*" hwe_install_log.txt) \
+  $(grep -E -o -m 1 "linux-image-[0-9\.]*-[0-9]*-generic" hwe_install_log.txt) \
+  $(grep -E -o -m 1 "linux-modules-[0-9\.]*-[0-9]*-generic" hwe_install_log.txt) \
+  $(grep -E -o -m 1 "linux-modules-extra-[0-9\.]*-[0-9]*-generic" hwe_install_log.txt)
+
+rm hwe_install_log.txt
+
+cd ../../..
+
 sudo cp ../VERSION iso/scripts/
+
+sed --in-place "s/VERSION/$(cat ../VERSION)/" iso/boot/grub/grub.cfg
 
 mbr="boot_hybrid.img"
 

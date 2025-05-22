@@ -16,8 +16,27 @@ export DEBIAN_FRONTEND=noninteractive
 # Set proper, restricted permissions on superuser homedir
 chmod -R 700 /home/superuser
 
+# Check the internet connection
+if ! curl --head --silent --fail https://www.google.com > /dev/null 2>&1; then
+  printf "\n%s\n%s\n" "Your kiosk machine is not connected to the internet." \
+  "Check your connection and then try running sudo os2borgerpc_kiosk_setup again."
+  exit 1
+fi
+
+# Check the connection to dk.archive.ubuntu.com
+if ! curl --head --silent --fail dk.archive.ubuntu.com > /dev/null 2>&1; then
+  printf "\n%s\n%s\n%s\n" "Cannot connect to the Ubuntu archives. Perhaps they are temporarily down." \
+  "Try waiting a couple hours and then running sudo os2borgerpc_kiosk_setup again." \
+  "If the problem persists for more than a day, check your firewall configuration."
+  exit 1
+fi
+
 # Install all necessary packages and dependencies
-$DIR/install_dependencies.sh
+if ! $DIR/install_dependencies.sh; then
+  printf "\n%s\n%s\n" "Installing required files failed." \
+  "Try restarting the computer and then running sudo os2borgerpc_kiosk_setup again."
+  exit 1
+fi
 
 # Prepare to run jobs
 mkdir -p /var/lib/os2borgerpc/jobs
@@ -41,19 +60,65 @@ if ! id $USER &>/dev/null; then
 fi
 
 # Setup autologin of default user
-mkdir -p /etc/systemd/system/getty@tty1.service.d
+mkdir --parents /etc/systemd/system/getty@tty1.service.d /usr/share/os2borgerpc/bin
+
+AUTOLOGIN_SCRIPT="/usr/share/os2borgerpc/bin/autologin.sh"
+AUTOLOGIN_COUNTER="/etc/os2borgerpc/login_counter.txt"
+COUNTER_RESET_SERVICE="/etc/systemd/system/reset_login_counter.service"
+MAXIMUM_CONSECUTIVE_AUTOLOGINS=3
 
 # Note: The empty ExecStart is not insignificant!
 # By default the value is appended, so the empty line changes it to an override
+# We make agetty use our own login-program instead of /bin/login
+# so we can customize the behavior
 cat << EOF > /etc/systemd/system/getty@tty1.service.d/override.conf
 [Service]
 ExecStart=
-ExecStart=-/sbin/agetty --noissue --autologin $USER %I $TERM
+ExecStart=-/sbin/agetty --noissue --login-program $AUTOLOGIN_SCRIPT --autologin $USER %I $TERM
 Type=idle
 EOF
 
+# Create the login script
+cat << EOF > $AUTOLOGIN_SCRIPT
+#! /usr/bin/env bash
+COUNTER=\$(cat $AUTOLOGIN_COUNTER)
+COUNTER=\$((COUNTER+1))
+echo \$COUNTER > $AUTOLOGIN_COUNTER
+if [ \$COUNTER -le $MAXIMUM_CONSECUTIVE_AUTOLOGINS ]; then
+  if [ \$COUNTER -gt 1 ]; then
+    # Sleep before autologin attempts other than the first
+    sleep 10
+  fi
+  # Autologin as $USER
+  /bin/login -f $USER
+else
+  # Regular login prompt
+  /bin/login
+fi
+EOF
+
+chmod 700 $AUTOLOGIN_SCRIPT
+
+# Create login counter
+echo "0" > $AUTOLOGIN_COUNTER
+
+# Create service to reset counter when
+# the computer is booted
+cat << EOF > $COUNTER_RESET_SERVICE
+[Unit]
+Description=Reset the autologin counter when the computer starts
+
+[Service]
+Type=oneshot
+ExecStart=sh -c 'echo "0" > $AUTOLOGIN_COUNTER'
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl enable --now "$(basename $COUNTER_RESET_SERVICE)"
+
 # Create script to rotate screen
-mkdir --parents /usr/share/os2borgerpc/bin
 cat << EOF > /usr/share/os2borgerpc/bin/rotate_screen.sh
 #!/usr/bin/env sh
 
@@ -91,3 +156,6 @@ EOF
 
 #  Connect to the admin system
 register_new_os2borgerpc_client.sh
+
+# Remove first boot setup files
+rm -f /etc/profile.d/installation_wizard.sh /etc/sudoers.d/first_boot_setup

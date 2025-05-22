@@ -6,13 +6,11 @@ then
 	exit
 fi
 
-# Install all Debian packages needed to set up wifi.
+# Install all Debian packages needed for the hwe kernel
 
 
 DIR=$(dirname ${BASH_SOURCE[0]})
 
-PACKAGE_DIR=${DIR}/wifi
+PACKAGE_DIR=${DIR}/hwe
 
 dpkg -i ${PACKAGE_DIR}/*.deb
-
-touch /etc/wifi-setup-done

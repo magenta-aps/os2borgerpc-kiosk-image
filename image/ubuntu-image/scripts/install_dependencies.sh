@@ -5,17 +5,12 @@
 DIR=$(dirname ${BASH_SOURCE[0]})
 
 # Step 1: Check for valid APT repositories.
-
-apt-get update &> /dev/null
-RET_VAL=$?
-if [ $RET_VAL -ne 0 ]; then
-    echo "" 1>&2
-    echo "ERROR: Apt repositories are not valid or cannot be reached from your network." 1>&2
-    echo "Please fix and retry" 1>&2
-    echo "" 1>&2
-    exit 1
-else
-    echo "Repositories OK: Installing packages"
+# apt-get update returns exit code 0 even when it fails due to
+# missing internet connection, DNS issues or similar so
+# we cannot use the exit code to check for failure
+if apt-get update | grep --quiet "Err"; then
+  printf "\nUpdating repositories failed\n"
+  exit 1
 fi
 
 # Update and upgrade the system
@@ -47,35 +42,24 @@ if [ "$PKGS_TO_INSTALL" != "" ]; then
     echo " The following packages will be installed: $PKGS_TO_INSTALL"
 
     # Step 1: Check for valid APT repositories.
-
-    apt-get update &> /dev/null
-    RETVAL=$?
-    if [ $RETVAL -ne 0 ]; then
-        echo "" 1>&2
-        echo "ERROR: Apt repositories are not valid or cannot be reached from your network." 1>&2
-        echo "Please fix and retry" 1>&2
-        echo "" 1>&2
-        exit 1
-    else
-        echo "Repositories OK: Installing packages"
+    # apt-get update returns exit code 0 even when it fails due to
+    # missing internet connection, DNS issues or similar so
+    # we cannot use the exit code to check for failure
+    if apt-get update | grep --quiet "Err"; then
+      printf "\nUpdating repositories failed\n"
+      exit 1
     fi
 
     # Step 2: Do the actual installation. Abort if it fails.
-    # and install
     # shellcheck disable=SC2086 # We want word-splitting here
-    apt-get -y install $PKGS_TO_INSTALL | tee /tmp/os2borgerpc_install_log.txt
-    RET_VAL=$?
-    if [ $RET_VAL -ne 0 ]; then
-        echo "" 1>&2
-        echo "ERROR: Installation of dependencies failed." 1>&2
-        echo "Please note that \"universe\" repository MUST be enabled" 1>&2
-        echo "" 1>&2
-        exit 1
+    if ! apt-get -y install $PKGS_TO_INSTALL; then
+      printf "\nPackage installation failed\n"
+      exit 1
     fi
 fi
 
-# Install os2borgerpc client
-pip3 install os2borgerpc-client
+# Install os2borgerpc client, exit if it fails
+pipx install os2borgerpc-client || sh -c 'printf "\nClient installation failed\n" && exit 1'
 
 # Install Danish language package
 apt-get -y install language-pack-da language-pack-da-base

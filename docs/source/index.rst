@@ -1,14 +1,10 @@
-.. os2borgerpc-kiosk-image documentation master file, created by
-   sphinx-quickstart on Thu Apr 29 11:35:26 2021.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
-=========================
+#########################
 OS2BorgerPC - Kiosk Image
-=========================
+#########################
 
+************
 Introduction
-============
+************
 
 OS2BorgerPC - Kiosk Image is the specialized Ubuntu distribution server image for audience PCs in
 public libraries in Denmark (Part of the `OS2BorgerPC system <https://os2.eu/produkt/os2borgerpc>`_).
@@ -16,13 +12,15 @@ public libraries in Denmark (Part of the `OS2BorgerPC system <https://os2.eu/pro
 .. toctree::
    :maxdepth: 2
 
-   technical_documentation
    readme
+   install_setup
+   install_setup_legacy
    news
-   upgrade
+   archive
 
+******************
 Indices and tables
-==================
+******************
 
 * :ref:`genindex`
 * :ref:`modindex`

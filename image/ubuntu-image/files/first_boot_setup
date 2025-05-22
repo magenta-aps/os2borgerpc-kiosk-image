@@ -1,0 +1,2 @@
+superuser ALL=(root) NOPASSWD: /usr/local/bin/wifi_setup
+superuser ALL=(root) NOPASSWD: /usr/local/bin/os2borgerpc_kiosk_setup
