@@ -1,19 +1,31 @@
 # Release History
 
+## Version 3.0.0, May 5, 2025
+
+Changes in this version:
+
+- Upgraded to Ubuntu 24.04.2.
+- Add installation wizard for final setup.
+- Add option to install HWE kernel from included files (i.e. offline).
+- Build in new autologin approach.
+- Switch to installing client via pipx.
+- Include version number in GRUB menu.
+- Update documentation.
+
 ## Version 2.1.0, December 21, 2023
 
 Changes in this version:
 
-- Upgraded to Ubuntu 22.04.3
-- Updated README for consistency
+- Upgraded to Ubuntu 22.04.3.
+- Updated README for consistency.
 
 ## Version 2.0.0, March 9, 2023
 
 Changes in this version:
 
 - Upgraded to Ubuntu 22.04.2.
-- Build in user creation and screen rotation program
-- Make dpkg work more noninteractively by default
+- Build in user creation and screen rotation program.
+- Make dpkg work more noninteractively by default.
 
 ## Version 1.1.0, Februar 2, 2022
 

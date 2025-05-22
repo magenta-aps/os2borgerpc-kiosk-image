@@ -10,7 +10,7 @@ or build one yourself according to the instructions in the `image`
 directory.
 
 Copy the image to a USB or DVD and boot the target computer with it.
-One cross platform program for this purpose is "Rufus".
+One Windows program for this purpose is "Rufus".
 
 The image will work with UEFI boot, but legacy boot is also supported.
 
