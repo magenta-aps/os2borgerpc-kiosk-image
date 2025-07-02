@@ -46,6 +46,12 @@ templates_path = ["_templates"]
 # Usually you set "language" from the command line for these cases.
 language = "en"
 
+html_theme_options = {
+  'collapse_navigation': True,
+  'navigation_depth': 3,
+  'titles_only': False
+}
+
 
 # -- Options for HTML output -------------------------------------------------
 
