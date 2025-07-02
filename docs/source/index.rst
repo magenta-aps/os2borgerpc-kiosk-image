@@ -13,7 +13,7 @@ public libraries in Denmark (Part of the `OS2BorgerPC system <https://os2.eu/pro
    :maxdepth: 3
 
    readme
-   install_setup
+   install_setup_x64
    install_setup_rpi
    install_setup_x64_legacy
    configuration

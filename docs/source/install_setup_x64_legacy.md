@@ -3,7 +3,7 @@
 :::{note}
 This is the Installation guide for OS2borgerPC Kiosk 22.04 and older.
 We instead recommend installing our newer 24.04 images.
-The installation guide for the newer images can be found [here](install_setup.md).
+The installation guide for the newer images can be found [here](install_setup_x64.md).
 :::
 
 ## Install OS2borgerPC Kiosk image
