@@ -24,5 +24,5 @@ To build the documentation locally:
    ```
 2.
    ```sh
-   make html      # or run `make` with no arguments to see other options
+   make html      # or run `make` with no arguments to see the available options
    ```
