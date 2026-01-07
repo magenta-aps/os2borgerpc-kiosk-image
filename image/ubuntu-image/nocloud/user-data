@@ -23,6 +23,7 @@ autoinstall:
         name: lvm
 
   late-commands:
+    - cp -r /cdrom/custom_scripts/ /usr/share/os2borgerpc/
     - cp -r /cdrom/scripts/* /target/usr/local/bin
     # Makes the auto login folder and copy the override.conf file to it
     - mkdir -p /target/etc/systemd/system/getty@tty1.service.d/

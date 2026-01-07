@@ -30,6 +30,8 @@ build/install_dependencies.sh
 
 build/extract_iso.sh "$ISO_PATH" iso
 
+mkdir --parents iso/custom_scripts # rsync does not make this folder because it does not contain any files in the repo
+
 cd iso/scripts/wifi || exit 1
 # These are downloaded from the host system currently, so maybe it needs to be built from a machine that's the same version of
 # Ubuntu as the target?

@@ -16,6 +16,16 @@ export DEBIAN_FRONTEND=noninteractive
 # Set proper, restricted permissions on superuser homedir
 chmod -R 700 /home/superuser
 
+# Run any added custom scripts
+CUSTOM_SCRIPTS_DIR="/usr/share/os2borgerpc/custom_scripts"
+if [ -d "$CUSTOM_SCRIPTS_DIR" ]; then
+  CUSTOM_SCRIPTS=$(find $CUSTOM_SCRIPTS_DIR -maxdepth 1 -regex ".*\.sh\|.*\.py")
+  for FILE in $CUSTOM_SCRIPTS; do
+    ./"$FILE"
+  done
+  rm --recursive $CUSTOM_SCRIPTS_DIR
+fi
+
 # Check the internet connection
 if ! curl --head --silent --fail https://www.google.com > /dev/null 2>&1; then
   printf "\n%s\n%s\n" "Your kiosk machine is not connected to the internet." \
