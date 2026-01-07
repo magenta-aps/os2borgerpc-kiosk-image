@@ -35,6 +35,7 @@ autoinstall:
     # Add admin-url file
     - mkdir -p /target/etc/os2borgerpc
     - cp /cdrom/files/admin-url /target/etc/os2borgerpc/admin-url
+    - cp /cdrom/automatic_registration_config /target/etc/os2borgerpc/
     # Configure pipx bin directory
     - echo 'PIPX_BIN_DIR="/usr/local/bin"' >> /target/etc/environment
 
