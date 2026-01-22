@@ -21,9 +21,7 @@ set -ex
 
 if [ "$CLEAN_BUILD" = "--clean" ]
 then
-    # Note: If testing locally maybe comment this next line out and use the subsequent one instead, so wifi deps are kept
-    sudo rm -rf iso /tmp/build_installed_packages_list.txt scripts/wifi/*.deb boot_hybrid.img ubuntu22-server-amd64.efi
-    # sudo rm -rf iso /tmp/build_installed_packages_list.txt
+  sudo rm -rf iso /tmp/build_installed_packages_list.txt boot_hybrid.img ubuntu-server-amd64.efi
 fi
 
 build/install_dependencies.sh
@@ -32,7 +30,7 @@ build/extract_iso.sh "$ISO_PATH" iso
 
 mkdir --parents iso/custom_scripts # rsync does not make this folder because it does not contain any files in the repo
 
-cd iso/scripts/wifi || exit 1
+cd iso/bin/wifi || exit 1
 # These are downloaded from the host system currently, so maybe it needs to be built from a machine that's the same version of
 # Ubuntu as the target?
 # Note: If testing locally consider commenting out these two to make the build process a bit faster
@@ -41,8 +39,8 @@ sudo apt download $(tr '\n' ' ' < wifi_deps.txt)
 
 popd
 
-mkdir --parents iso/scripts/hwe # rsync does not make this folder because it does not contain any files in the repo
-cd iso/scripts/hwe || exit 1
+mkdir --parents iso/bin/hwe # rsync does not make this folder because it does not contain any files in the repo
+cd iso/bin/hwe || exit 1
 # We do this separately because we need to determine the names of the dependencies for the hwe kernel
 # These dependencies include the version number in their name so we determine the names dynamically
 # based on what is listed in the output from apt-get install --download-only
@@ -61,13 +59,13 @@ rm hwe_install_log.txt
 
 cd ../../..
 
-sudo cp ../VERSION iso/scripts/
+sudo cp ../VERSION iso/bin/
 
 sed --in-place "s/VERSION/$(cat ../VERSION)/" iso/boot/grub/grub.cfg
 
 mbr="boot_hybrid.img"
 
-efi="ubuntu22-server-amd64.efi"
+efi="ubuntu-server-amd64.efi"
 
 # Extract the MBR template
 
