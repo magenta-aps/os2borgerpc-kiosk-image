@@ -24,7 +24,7 @@ autoinstall:
 
   late-commands:
     - cp -r /cdrom/custom_scripts/ /usr/share/os2borgerpc/
-    - cp -r /cdrom/scripts/* /target/usr/local/bin
+    - cp -r /cdrom/bin/* /target/usr/local/bin
     # Makes the auto login folder and copy the override.conf file to it
     - mkdir -p /target/etc/systemd/system/getty@tty1.service.d/
     - cp /cdrom/files/override.conf /target/etc/systemd/system/getty@tty1.service.d/override.conf
