@@ -13,7 +13,7 @@ if [ "$PC_NAME" = "serial_number" ]; then
   PC_NAME=$(dmidecode --type system | grep "Serial" | cut --delimiter ":" --fields 2 | xargs)
 fi
 # Make sure that the PC name is a valid hostname
-if ! [[ "$PC_NAME" =~ ^[0-9a-zA-Z][0-9a-zA-Z-]{1-40}$ ]]; then
+if ! [[ "$PC_NAME" =~ ^[0-9a-zA-Z][0-9a-zA-Z-]{1,40}$ ]]; then
   # The PC name used for automatic registration is not a valid hostname
   # so we cancel automatic registration
   exit 1
