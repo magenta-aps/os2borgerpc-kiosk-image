@@ -24,7 +24,8 @@ CUSTOM_SCRIPTS_DIR="/usr/share/os2borgerpc/custom_scripts"
 if [ -d "$CUSTOM_SCRIPTS_DIR" ]; then
   CUSTOM_SCRIPTS=$(find $CUSTOM_SCRIPTS_DIR -maxdepth 1 -regex ".*\.sh\|.*\.py")
   for FILE in $CUSTOM_SCRIPTS; do
-    ./"$FILE"
+    sed --in-place "s/\r//" "$FILE"
+    "$FILE"
   done
   rm --recursive $CUSTOM_SCRIPTS_DIR
 fi
@@ -49,6 +50,13 @@ if ! $DIR/install_dependencies.sh; then
   printf "\n%s\n%s\n" "Installing required files failed." \
   "Try restarting the computer and then running sudo os2borgerpc_kiosk_setup again."
   exit 1
+fi
+
+# Secure GRUB as GRUB should now be fully installed, unlike at the time the image is being created
+GRUB_SCRIPT="$DIR/grub_set_password.py"
+if [ -f "$GRUB_SCRIPT" ]; then
+  $GRUB_SCRIPT "$(pwgen -N 1 -s 12)"
+  rm --force $GRUB_SCRIPT
 fi
 
 # Prepare to run jobs
