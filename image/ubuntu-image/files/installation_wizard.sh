@@ -32,7 +32,7 @@ if [ -f "$AUTOMATIC_REGISTRATION_CONFIG" ]; then
   SITE_UID=$(grep "site_uid" "$AUTOMATIC_REGISTRATION_CONFIG" | cut --delimiter ":" --fields 2 | xargs)
   PC_NAME=$(grep "pc_name" "$AUTOMATIC_REGISTRATION_CONFIG" | cut --delimiter ":" --fields 2 | xargs)
   if [ ! -z "$SITE_UID" ] && [ ! -z "$PC_NAME" ]; then
-    if sudo os2borgerpc_kiosk_setup "$SITE_UID" "$PC_NAME"; then
+    if sudo os2borgerpc_kiosk_setup "True"; then
       exit 0
     fi
   fi
