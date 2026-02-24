@@ -5,9 +5,8 @@ if [ $UID -ne 0 ]; then
   exit 1
 fi
 
-# Variables for automatic registration
-SITE_UID="$1"
-PC_NAME="$2"
+# Manual registration is default
+AUTOMATIC_REGISTRATION="${1:-False}"
 
 # Setup the OS2BorgerPC client on an Ubuntu Server
 
@@ -165,12 +164,12 @@ Dpkg::Lock {Timeout "300";};
 EOF
 
 #  Connect to the admin system
-if [ -n "$SITE_UID" ] && [ -n "$PC_NAME" ]; then
-  automatic_registration.sh "$SITE_UID" "$PC_NAME"
+if [ "$AUTOMATIC_REGISTRATION" = "True" ]; then
+  automatic_registration.sh
 else
   register_new_os2borgerpc_client.sh
 fi
 
 # Remove first boot setup files
-rm -f /etc/profile.d/installation_wizard.sh /etc/sudoers.d/first_boot_setup \
+rm --force /etc/profile.d/installation_wizard.sh /etc/sudoers.d/first_boot_setup \
 /etc/os2borgerpc/automatic_registration_config /usr/local/bin/automatic_registration.sh

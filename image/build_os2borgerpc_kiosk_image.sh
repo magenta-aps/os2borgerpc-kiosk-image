@@ -6,8 +6,7 @@ CLEAN_BUILD=$3
 
 pushd .
 
-if [[ -z $ISO_PATH || -z $IMAGE_NAME ]]
-then
+if [[ -z $ISO_PATH || -z $IMAGE_NAME ]]; then
     echo -e "Usage: $0 iso_file image_name [--clean]\n"
     echo "iso_file must be a valid path to the ISO file to be remastered"
     echo "image_name is the name of the output image"
@@ -19,8 +18,7 @@ figlet "Building OS2borgerPC Kiosk"
 
 set -ex
 
-if [ "$CLEAN_BUILD" = "--clean" ]
-then
+if [ "$CLEAN_BUILD" = "--clean" ]; then
   sudo rm -rf iso /tmp/build_installed_packages_list.txt boot_hybrid.img ubuntu-server-amd64.efi
 fi
 
