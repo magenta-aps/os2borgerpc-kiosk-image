@@ -4,7 +4,7 @@
 echo 'PIPX_BIN_DIR="/usr/local/bin"' >> /etc/environment
 
 # Run any added custom scripts
-CUSTOM_SCRIPTS_DIR="/usr/share/os2borgerpc/custom_scripts"
+CUSTOM_SCRIPTS_DIR="/etc/os2borgerpc/custom_scripts"
 if [ -d "$CUSTOM_SCRIPTS_DIR" ]; then
   CUSTOM_SCRIPTS=$(find $CUSTOM_SCRIPTS_DIR -maxdepth 1 -regex ".*\.sh\|.*\.py")
   for FILE in $CUSTOM_SCRIPTS; do
@@ -13,6 +13,5 @@ if [ -d "$CUSTOM_SCRIPTS_DIR" ]; then
   done
   rm --recursive $CUSTOM_SCRIPTS_DIR
 fi
-
 # Remove post-install script
-#rm --force "$0"
+rm --force "$0"

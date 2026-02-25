@@ -125,7 +125,7 @@ ExecStart=sh -c 'echo "0" > $AUTOLOGIN_COUNTER'
 WantedBy=multi-user.target
 EOF
 
-systemctl enable --now "$(basename $COUNTER_RESET_SERVICE)"
+systemctl enable "$(basename $COUNTER_RESET_SERVICE)"
 
 # Create script to rotate screen
 cat << EOF > /usr/share/os2borgerpc/bin/rotate_screen.sh
@@ -171,5 +171,4 @@ else
 fi
 
 # Remove first boot setup files
-rm --force /etc/profile.d/installation_wizard.sh /etc/sudoers.d/first_boot_setup \
-/etc/os2borgerpc/automatic_registration_config /usr/local/bin/automatic_registration.sh
+rm --force /etc/profile.d/installation_wizard.sh /etc/sudoers.d/first_boot_setup
