@@ -59,7 +59,7 @@ if [ "$PKGS_TO_INSTALL" != "" ]; then
 fi
 
 # Install os2borgerpc client, exit if it fails
-pipx install os2borgerpc-client || sh -c 'printf "\nClient installation failed\n" && exit 1'
+pipx install os2borgerpc-client --pip-args "chardet<6.0" || sh -c 'printf "\nClient installation failed\n" && exit 1'
 
 # Clean .deb cache to save space
 apt-get --assume-yes autoremove
