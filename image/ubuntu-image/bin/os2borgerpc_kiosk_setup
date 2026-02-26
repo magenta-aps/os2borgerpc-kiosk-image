@@ -165,7 +165,14 @@ EOF
 
 #  Connect to the admin system
 if [ "$AUTOMATIC_REGISTRATION" = "True" ]; then
-  automatic_registration.sh
+  # If we started with automatic registration,
+  # exit to login prompt after registration succeeds or is aborted
+  echo "5" > $AUTOLOGIN_COUNTER
+  # If automatic registration fails, start manual registration
+  if ! automatic_registration.sh; then
+    printf "\nAutomatic registration failed. Starting manual registration.\n"
+    register_new_os2borgerpc_client.sh
+  fi
 else
   register_new_os2borgerpc_client.sh
 fi
