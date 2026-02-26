@@ -25,8 +25,10 @@ manual_wifi_setup() {
  done 
 }
 
+clear
+
 # If automatic registration is configured, run setup noninteractively
-# and assume that Wi-Fi drivers do not need to be installed
+# and install Wi-Fi drivers
 AUTOMATIC_REGISTRATION_CONFIG="/etc/os2borgerpc/automatic_registration_config"
 if [ -f "$AUTOMATIC_REGISTRATION_CONFIG" ]; then
   SITE_UID=$(grep "site_uid" "$AUTOMATIC_REGISTRATION_CONFIG" | cut --delimiter ":" --fields 2 | xargs)
@@ -38,13 +40,15 @@ if [ -f "$AUTOMATIC_REGISTRATION_CONFIG" ]; then
     fi
     # Run setup with automatic registration
     if sudo os2borgerpc_kiosk_setup "True"; then
+      # Exit to login prompt after registration succeeds or is aborted
       exit 0
+    else
+      printf "\nAutomatic setup failed. Starting manual setup.\n"
     fi
   fi
 fi
 
 while true; do
-  clear
   printf "This is the initial setup process for the OS2borgerPC Kiosk image."
   
   printf "\nDo you want to run the setup? (Y/n)"
@@ -95,6 +99,7 @@ while true; do
     if [ "$answerRestart" = "n" ]; then
       break
     fi
+    clear
   fi
 done
 
