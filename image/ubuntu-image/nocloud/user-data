@@ -23,19 +23,21 @@ autoinstall:
         name: lvm
 
   late-commands:
-    - cp -r /cdrom/scripts/* /target/usr/local/bin
+    - cp --recursive /cdrom/bin/* /target/usr/local/bin
     # Makes the auto login folder and copy the override.conf file to it
-    - mkdir -p /target/etc/systemd/system/getty@tty1.service.d/
+    - mkdir --parents /target/etc/systemd/system/getty@tty1.service.d/
     - cp /cdrom/files/override.conf /target/etc/systemd/system/getty@tty1.service.d/override.conf
     # Makes the installation_wizard.sh run on login
     - cp /cdrom/files/installation_wizard.sh /target/etc/profile.d/installation_wizard.sh
     # This allows the wifi_setup and os2borgerpc_kiosk_setup to run without sudo password, made in writefiles
     - cp /cdrom/files/first_boot_setup /target/etc/sudoers.d/first_boot_setup
     # Add admin-url file
-    - mkdir -p /target/etc/os2borgerpc
+    - mkdir --parents /target/etc/os2borgerpc
     - cp /cdrom/files/admin-url /target/etc/os2borgerpc/admin-url
-    # Configure pipx bin directory
-    - echo 'PIPX_BIN_DIR="/usr/local/bin"' >> /target/etc/environment
+    - cp /cdrom/automatic_registration_config /target/etc/os2borgerpc/
+    - cp --recursive /cdrom/custom_scripts/ /target/etc/os2borgerpc/
+    # Run post-install script
+    - curtin in-target -- /usr/local/bin/post-install.sh
 
   version: 1
   interactive-sections:
