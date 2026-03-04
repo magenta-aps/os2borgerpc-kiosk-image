@@ -1,5 +1,15 @@
 # Release History
 
+## Version 3.1.0, March 4, 2026
+
+Changes in this version:
+
+- Upgraded to Ubuntu 24.04.4
+- Add support for automatic setup and registration
+- Add support for running custom scripts at the end of the installation
+- Have os2borgerpc_kiosk_setup set a random GRUB password
+- Change system language to English
+
 ## Version 3.0.0, May 5, 2025
 
 Changes in this version:
