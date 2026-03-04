@@ -8,7 +8,7 @@ CUSTOM_SCRIPTS_DIR="/etc/os2borgerpc/custom_scripts"
 if [ -d "$CUSTOM_SCRIPTS_DIR" ]; then
   CUSTOM_SCRIPTS=$(find $CUSTOM_SCRIPTS_DIR -maxdepth 1 -regex ".*\.sh\|.*\.py")
   for FILE in $CUSTOM_SCRIPTS; do
-    sed --in-place "s/\r//" "$FILE"
+    sed --in-place "s/\r//" "$FILE" # This is done to remove potential windows line endings
     "$FILE"
   done
   rm --recursive $CUSTOM_SCRIPTS_DIR
