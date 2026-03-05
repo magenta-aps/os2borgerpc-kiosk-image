@@ -2,4 +2,5 @@
 iso/
 .idea/
 boot_hybrid.img
+ubuntu-server-amd64.efi
 *.efi

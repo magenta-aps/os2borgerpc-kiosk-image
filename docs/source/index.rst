@@ -1,6 +1,6 @@
-#########################
-OS2BorgerPC - Kiosk Image
-#########################
+##########################
+OS2borgerPC - Kiosk Images
+##########################
 
 ************
 Introduction
@@ -10,11 +10,13 @@ OS2BorgerPC - Kiosk Image is the specialized Ubuntu distribution server image fo
 public libraries in Denmark (Part of the `OS2BorgerPC system <https://os2.eu/produkt/os2borgerpc>`_).
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
    readme
-   install_setup
-   install_setup_legacy
+   install_setup_x64
+   install_setup_rpi
+   install_setup_x64_legacy
+   configuration
    news
    archive
 

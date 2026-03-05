@@ -59,23 +59,19 @@ if [ "$PKGS_TO_INSTALL" != "" ]; then
 fi
 
 # Install os2borgerpc client, exit if it fails
-pipx install os2borgerpc-client || sh -c 'printf "\nClient installation failed\n" && exit 1'
-
-# Install Danish language package
-apt-get -y install language-pack-da language-pack-da-base
+# We fix the version of chardet to prevent a dependency warning from requests
+# Check if this is still necessary during next image build
+pipx install os2borgerpc-client --pip-args "chardet<6.0" || sh -c 'printf "\nClient installation failed\n" && exit 1'
 
 # Clean .deb cache to save space
-apt-get -y autoremove
-apt-get -y clean
+apt-get --assume-yes autoremove
+apt-get --assume-yes clean
 
 # OS2borgerPC Kiosk specifics:
 
-# Set Danish locale and timezone, e.g. for usage
-# with Aula and attached/onscreen keyboards
+# Set Danish timezone
 timedatectl set-timezone Europe/Copenhagen
-sed -i 's/# \(da_DK.UTF-8 UTF-8\)/\1/'  /etc/locale.gen
 dpkg-reconfigure --frontend=noninteractive tzdata
-update-locale LANG=da_DK.utf-8
 
 # Update the time accordingly
 ntpdate pool.ntp.org
