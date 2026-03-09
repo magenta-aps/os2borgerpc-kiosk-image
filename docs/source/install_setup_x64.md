@@ -11,10 +11,98 @@ Get the most recent OS2borgerPC Kiosk image as provided by Magenta,
 or build one yourself according to the instructions in the `image`
 directory.
 
-Copy the image to a USB or DVD and boot the target computer with it.
+Copy the image to a USB and boot the target computer with it.
 One Windows program for this purpose is "Rufus".
 
 The image will work with UEFI boot, but legacy boot is also supported.
+
+Image 3.1.0 and newer images support the option for automatic setup and 
+registration and/or running scripts at the end of the installation. If 
+you wish to make use of these options, it will be necessary to modify
+the USB before you boot the computer with it. This requires that the USB
+is writable. The program "Rufus" makes writable USB's by default. The
+configuration of these options is described in the related sections.
+If you do not wish to make use of the options for automatic setup and
+registration and/or running scripts at the end of the installation,
+you can skip to the section "The installation procedure".
+
+### Configuring automatic setup and registration (optional)
+If you are using image 3.1.0 or a newer image, the root of the file system
+on the USB will contain a file named "automatic_registration_config". If you
+write the site UID and computer name in this file, the computer will use the
+listed values to perform automatic setup and registration after the installation
+procedure. When using automatic setup and registration, the computer will always
+install the Wi-Fi drivers mentioned in the section "Getting internet access".
+
+The final setup and automatic registration both require an internet connection.
+If the file "automatic_registration_config" has been filled out, but the computer does
+not have an internet connection after the installation procedure, the 
+automatic setup will fail, which also prevents the computer from performing automatic
+registration. Wi-Fi drivers will still be installed. The computer will then instead
+ask if you wish to start the built-in installation wizard. If the automatic
+registration itself fails, because the site UID or computer name is invalid, a
+firewall blocks the registration or the network is unstable, the computer will instead
+start the manual registration process. It will be necessary to restart the installation
+if you wish to repeat the automatic registration.
+
+The computer name for automatic registration will by default be "serial_number", which
+makes the computer attempt to read its serial number and use that as the name for
+the automatic registration. The computer can only read its serial number if the
+manufacturer has correctly listed it in a way that allows the operating system to
+access it. This is the case for the vast majority of computer models, but not for all
+computer models. If the computer can't read its serial number, automatic registration
+with serial number as the name will fail.
+
+The file "automatic_registration_config" has the following default content:
+
+```sh
+site_uid:
+pc_name:serial_number
+```
+
+If the content of "automatic_registration_config" is not changed from the default,
+the computer will not perform automatic setup and registration.
+
+The following is an example of the content of an "automatic_registration_config" file
+that would cause the computer to perform automatic setup and registration with the site
+that has site UID "test-site" with the computer's serial number as the name:
+
+```sh
+site_uid:test-site
+pc_name:serial_number
+```
+
+The following is an example of the content of an "automatic_registration_config" file
+that would cause the computer to perform automatic setup and registration with the site
+that has site UID "test-site" with the computer name "test-pc": 
+
+```sh
+site_uid:test-site
+pc_name:test-pc
+```
+
+:::{note}
+After automatic registration, it is still necessary to activate the computer
+on the admin portal before you can e.g. run scripts on it.
+:::
+
+### Running scripts at the end of the installation (optional)
+
+If you are using image 3.1.0 or a newer image, the root of the file system on
+the USB will contain a directory named "custom_scripts". All .sh and .py scripts,
+that are placed in this directory, will automatically be run at the end of the
+installation procedure. If one of these scripts requires parameters, the parameters
+must be included in the script file itself, as the scripts in the directory are run
+without any external parameters. If a script requires a file parameter, that
+file can also be placed in the directory "custom_scripts", and the script can refer
+to it by utilizing the fact that they are both located in the same directory.
+
+:::{caution}
+If a script in the directory "custom_scripts" fails, the installation itself
+might also fail.
+:::
+
+## The installation procedure
 
 The installation procedure will not ask a lot of questions. First of
 all, it will ask you to specify the disk you will install on, as shown below:
@@ -44,12 +132,26 @@ now be asked to "Confirm destructive action". To proceed, select "Continue".
 
 The system will now install - this will take some time.
 
+At the end of the installation procedure, the computer will run any .sh or .py
+scripts added to the directory "custom_scripts".
+
 Remove the installation media and reboot.
 
 :::{note}
 If you chose to activate disk encryption, the computer
 will ask for the passphrase shortly after the reboot.
 :::
+
+# Setup after the installation procedure
+
+The following sections describe the process for manual setup and registration
+after the installation procedure. If you are using automatic setup and registration,
+you can thus skip directly to the section on "Post registration configuration" in
+[Configuration and advanced topics](configuration.md) unless the automatic setup or
+registration fails. If automatic setup and registration succeeds, the computer
+will simply show a login prompt after the automatic registration.
+
+## Manual setup after the installation procedure
 
 The computer will now ask if you wish to start the built-in installation wizard.
 
@@ -163,15 +265,10 @@ Finally, you'll be prompted for information to register the machine
 with our admin system:
 
 - `name`: Give the computer any valid name you like.
-- `site`: If hosted by us: Use the site name we should've e-mailed you. If self-hosting or developing: Create a site, and
-  specify its name here.
+- `site`: If hosted by us: Use the site UID we should've e-mailed you. If self-hosting or developing: Create a site, and
+  specify its UID here.
 
 The final setup is now complete.
-
-:::{danger}
-Please change the `superuser` password *immediately* after deploying each
-Kiosk!! There's a script in OS2borgerPC Admin to do this.
-:::
 
 ## Configuration and advanced topics
 
