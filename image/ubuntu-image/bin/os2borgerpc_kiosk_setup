@@ -21,6 +21,7 @@ chmod -R 700 /home/superuser
 # Automatic setup/registration will wait up to 300 seconds (10 tries) for a network connection
 # Manual setup fails immediately without a network connection
 ADMIN_URL_FILE="/etc/os2borgerpc/admin-url"
+ADMIN_URL=$(cat $ADMIN_URL_FILE)
 CONNECTION="False"
 if [ "$AUTOMATIC_REGISTRATION" = "True" ]; then
   CONNECTION_RETRY=10
@@ -29,7 +30,7 @@ else
 fi
 while [ "$CONNECTION" = "False" ] && [ $CONNECTION_RETRY -gt 0 ]; do
   CONNECTION_RETRY=$((CONNECTION_RETRY-1))
-  if wget --spider --quiet "$(cat $ADMIN_URL_FILE)"; then
+  if wget --spider --quiet "$ADMIN_URL"; then
     CONNECTION="True"
   else
     [ "$AUTOMATIC_REGISTRATION" = "True" ] && sleep 30
@@ -185,7 +186,7 @@ if [ "$AUTOMATIC_REGISTRATION" = "True" ]; then
   # exit to login prompt after registration succeeds or is aborted
   echo "5" > $AUTOLOGIN_COUNTER
   # If automatic registration fails, start manual registration
-  if ! automatic_registration.sh; then
+  if ! os2borgerpc_automatic_registration.sh; then
     printf "\nAutomatic registration failed. Starting manual registration.\n"
     register_new_os2borgerpc_client.sh
   fi
