@@ -1,5 +1,13 @@
 # Release History
 
+## Version 3.2.0, July 7, 2026
+
+Changes in this version:
+
+- Use the automatic registration script from the client
+- Use wget for connection checks
+- Continue installation if time sync fails
+
 ## Version 3.1.0, March 4, 2026
 
 Changes in this version:
