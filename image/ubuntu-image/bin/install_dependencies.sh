@@ -73,4 +73,4 @@ timedatectl set-timezone Europe/Copenhagen
 dpkg-reconfigure --frontend=noninteractive tzdata
 
 # Update the time accordingly
-ntpdate pool.ntp.org
+ntpdate pool.ntp.org || true
