@@ -1,15 +1,20 @@
 # Configuration and advanced topics
 
-## Post installation setup
+## Post registration configuration
+
+:::{danger}
+Please change the `superuser` password *immediately* after deploying each
+Kiosk!! There's a script in OS2borgerPC Admin to do this.
+:::
 
 Once the computer is connected to the OS2borgerPC Admin Portal and activated, the next steps
 depend on what you want to use your Kiosk computer for.
 
 You have two options here:
-1. Set up the computer to run OpenStream - our software for digital signage.
-1. Set up the computer to run Chromium - and select the start page yourself.
+1. Configure the computer to run OpenStream - our software for digital signage.
+2. Configure the computer to run Chromium - and select the start page yourself.
 
-### Setting up OpenStream
+### Configure the computer to run OpenStream
 
 This requires running the script "OS2borgerPC Kiosk - OpenStream Electron App Autostart",
 which will download a custom Electron App meant to be used with OpenStream and configure
@@ -20,7 +25,7 @@ the App/computer to connect to OpenStream.
 
 For more information about this script, read its description on the OS2borgerPC Admin Portal.
 
-### Setting up Chromium
+### Configure the computer to run Chromium
 
 There are two scripts needed to do this.
 

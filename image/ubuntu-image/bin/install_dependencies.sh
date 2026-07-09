@@ -59,8 +59,7 @@ if [ "$PKGS_TO_INSTALL" != "" ]; then
 fi
 
 # Install os2borgerpc client, exit if it fails
-# We fix the version of chardet to prevent a dependency warning from requests
-# Check if this is still necessary during next image build
+# We fix the version of chardet because newer versions were rewritten using an LLM
 pipx install os2borgerpc-client --pip-args "chardet<6.0" || sh -c 'printf "\nClient installation failed\n" && exit 1'
 
 # Clean .deb cache to save space
@@ -74,4 +73,4 @@ timedatectl set-timezone Europe/Copenhagen
 dpkg-reconfigure --frontend=noninteractive tzdata
 
 # Update the time accordingly
-ntpdate pool.ntp.org
+ntpdate pool.ntp.org || true

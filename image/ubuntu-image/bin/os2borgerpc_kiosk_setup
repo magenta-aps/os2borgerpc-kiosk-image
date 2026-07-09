@@ -18,15 +18,32 @@ export DEBIAN_FRONTEND=noninteractive
 # Set proper, restricted permissions on superuser homedir
 chmod -R 700 /home/superuser
 
-# Check the internet connection
-if ! curl --head --silent --fail https://www.google.com > /dev/null 2>&1; then
-  printf "\n%s\n%s\n" "Your kiosk machine is not connected to the internet." \
-  "Check your connection and then try running sudo os2borgerpc_kiosk_setup again."
+# Automatic setup/registration will wait up to 300 seconds (10 tries) for a network connection
+# Manual setup fails immediately without a network connection
+ADMIN_URL_FILE="/etc/os2borgerpc/admin-url"
+ADMIN_URL=$(cat $ADMIN_URL_FILE)
+CONNECTION="False"
+if [ "$AUTOMATIC_REGISTRATION" = "True" ]; then
+  CONNECTION_RETRY=10
+else
+  CONNECTION_RETRY=1
+fi
+while [ "$CONNECTION" = "False" ] && [ $CONNECTION_RETRY -gt 0 ]; do
+  CONNECTION_RETRY=$((CONNECTION_RETRY-1))
+  if wget --spider --quiet "$ADMIN_URL"; then
+    CONNECTION="True"
+  else
+    [ "$AUTOMATIC_REGISTRATION" = "True" ] && sleep 30
+  fi
+done
+if [ "$CONNECTION" != "True" ]; then
+  printf "\n%s\n%s\n" "Your kiosk machine cannot reach the admin portal." \
+  "Check your internet connection and then try running sudo os2borgerpc_kiosk_setup again."
   exit 1
 fi
 
 # Check the connection to dk.archive.ubuntu.com
-if ! curl --head --silent --fail dk.archive.ubuntu.com > /dev/null 2>&1; then
+if ! wget --spider --quiet dk.archive.ubuntu.com; then
   printf "\n%s\n%s\n%s\n" "Cannot connect to the Ubuntu archives. Perhaps they are temporarily down." \
   "Try waiting a couple hours and then running sudo os2borgerpc_kiosk_setup again." \
   "If the problem persists for more than a day, check your firewall configuration."
@@ -169,7 +186,7 @@ if [ "$AUTOMATIC_REGISTRATION" = "True" ]; then
   # exit to login prompt after registration succeeds or is aborted
   echo "5" > $AUTOLOGIN_COUNTER
   # If automatic registration fails, start manual registration
-  if ! automatic_registration.sh; then
+  if ! os2borgerpc_automatic_registration.sh; then
     printf "\nAutomatic registration failed. Starting manual registration.\n"
     register_new_os2borgerpc_client.sh
   fi
